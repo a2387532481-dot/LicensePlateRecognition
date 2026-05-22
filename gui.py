@@ -32,6 +32,7 @@ class PlateRecognitionApp:
         self.detector = PlateDetector()
         self.segmenter = CharSegmenter()
         self.recognizer = CharRecognizer()
+        self.recognizer.load_models()
 
         self.current_image = None
         self.result = None
@@ -152,15 +153,16 @@ class PlateRecognitionApp:
 
             bbox, plate_img = candidates[0]
 
-            # Segment for visualization only
+            # Segment characters
             chars = self.segmenter.segment(plate_img)
             char_images = [c[0] for c in chars] if chars else []
 
-            # PaddleOCR recognition
-            plate_text = self.recognizer.recognize_plate(plate_img)
+            # Dual-engine: CNN first, PaddleOCR fallback
+            recog_result = self.recognizer.recognize_plate(plate_img, char_images)
 
             self.result = {
-                "plate_text": plate_text,
+                "plate_text": recog_result["plate_text"],
+                "engine": recog_result["engine"],
                 "bbox": bbox,
                 "plate_img": plate_img,
                 "char_imgs": char_images,
@@ -184,6 +186,7 @@ class PlateRecognitionApp:
         # Detail info
         details = []
         details.append(f"车牌号: {text}")
+        details.append(f"识别引擎: {self.result['engine']}")
         details.append(f"字符数: {self.result['char_count']}")
         bbox = self.result["bbox"]
         details.append(f"位置: ({bbox[0]}, {bbox[1]}) {bbox[2]}x{bbox[3]}")

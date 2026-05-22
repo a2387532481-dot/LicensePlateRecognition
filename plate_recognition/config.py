@@ -11,8 +11,9 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 DIGIT_MODEL_PATH = os.path.join(MODEL_DIR, "digit_cnn.pth")
 LETTER_MODEL_PATH = os.path.join(MODEL_DIR, "letter_cnn.pth")
 PROVINCE_MODEL_PATH = os.path.join(MODEL_DIR, "province_cnn.pth")
+ALPHANUM_MODEL_PATH = os.path.join(MODEL_DIR, "alphanum_cnn.pth")
 
-# ── 彻底放宽 HSV 限制，只要带点蓝色调全放行（拯救阴影里的京K） ──
+# 极度放宽 HSV 限制，只要带点蓝色调全放行（拯救阴影里的京K）
 BLUE_LOWER1 = np.array([100, 40, 40])
 BLUE_UPPER1 = np.array([130, 255, 255])
 
@@ -20,7 +21,7 @@ BLUE_LOWER2 = np.array([100, 40, 40])
 BLUE_UPPER2 = np.array([130, 255, 255])
 
 PLATE_MIN_AREA = 1000
-PLATE_MAX_AREA = 200000  # 面积上限直接拉满
+PLATE_MAX_AREA = 200000
 PLATE_MIN_RATIO = 1.5
 PLATE_MAX_RATIO = 5.0
 
